@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './question.dart';
+import './answer.dart';
 
 void main() {
   runApp(FlutApp());
@@ -16,6 +17,20 @@ class FlutApp extends StatefulWidget {
 
 class _FlutAppState extends State<FlutApp> {
   var _quesIndex = 0;
+  final ques = [
+    {
+      'quesText': 'Whats your fav color?',
+      'answers': ['Black', 'Red', 'Green', 'White'],
+    },
+    {
+      'quesText': 'Whats your fav Animal?',
+      'answers': ['Rak', 'Rabbit', 'Lion', 'Penguin'],
+    },
+    {
+      'quesText': 'Whats your fav Anime?',
+      'answers': ['nothing', 'everything', 'something', 'anything'],
+    },
+  ];
 
   void _answerQues() {
     setState(() {
@@ -26,37 +41,25 @@ class _FlutAppState extends State<FlutApp> {
 
   @override
   Widget build(BuildContext context) {
-    var ques = [
-      'Whats your fav color?',
-      'Whats your fav animal?',
-    ];
-
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text('My FlutApp'),
         ),
-        body: Column(
-          children: <Widget>[
-            Question(ques.elementAt(_quesIndex)),
-            ElevatedButton(
-              onPressed: _answerQues,
-              child: Text('Answer 1'),
-            ),
-            ElevatedButton(
-              onPressed: () => {print('Chosen Answer 2!!')},
-              child: Text('Answer 2'),
-            ),
-            ElevatedButton(
-              onPressed: _answerQues,
-              child: Text('Answer 3'),
-            ),
-            ElevatedButton(
-              onPressed: _answerQues,
-              child: Text('Answer 4'),
-            ),
-          ],
-        ),
+        body: _quesIndex < ques.length
+            ? Column(
+                children: <Widget>[
+                  Question(
+                    (ques[_quesIndex]['quesText']).toString(),
+                  ),
+                  ...(ques[_quesIndex]['answers'] as List<String>)
+                      .map((answer) => Answer(_answerQues, answer))
+                      .toList(),
+                ],
+              )
+            : Center(
+                child: Text('Questions got over!!'),
+              ),
       ),
     );
   }
